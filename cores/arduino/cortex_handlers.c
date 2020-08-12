@@ -54,6 +54,7 @@ void SysTick_Handler(void)
 	TimeTick_Increment();
 }
 
+#ifndef __SAM3S4A__ //Arduino moved all this stuff from startup_sam3xa.c so it doesn't apply to sam3s.
 /* Peripherals handlers */
 void SUPC_Handler       (void) __attribute__ ((weak, alias("__halt")));
 void RSTC_Handler       (void) __attribute__ ((weak, alias("__halt")));
@@ -121,7 +122,53 @@ void EMAC_Handler       (void) __attribute__ ((weak, alias("__halt")));
 void CAN0_Handler       (void) __attribute__ ((weak, alias("__halt")));
 void CAN1_Handler       (void) __attribute__ ((weak, alias("__halt")));
 
+#else //SAM3S4A
+/* Peripherals handlers */
+void SUPC_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
+void RSTC_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
+void RTC_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void RTT_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void WDT_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void PMC_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void EFC_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void UART0_Handler      ( void ) __attribute__ ((weak, alias("__halt")));
+void UART1_Handler      ( void ) __attribute__ ((weak, alias("__halt")));
+#ifdef _SAM3S_SMC_INSTANCE_
+void SMC_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+#endif /* _SAM3S_SMC_INSTANCE_ */
+void PIOA_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
+void PIOB_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
+#ifdef _SAM3S_PIOC_INSTANCE_
+void PIOC_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
+#endif /* _SAM3S_PIOC_INSTANCE_ */
+void USART0_Handler     ( void ) __attribute__ ((weak, alias("__halt")));
+#ifdef _SAM3S_USART1_INSTANCE_
+void USART1_Handler     ( void ) __attribute__ ((weak, alias("__halt")));
+#endif /* _SAM3S_USART1_INSTANCE_ */
+void HSMCI_Handler      ( void ) __attribute__ ((weak, alias("__halt")));
+void TWI0_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
+void TWI1_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
+void SPI_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void SSC_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void TC0_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void TC1_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void TC2_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+#ifdef _SAM3S_TC1_INSTANCE_
+void TC3_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void TC4_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void TC5_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+#endif /* _SAM3S_TC1_INSTANCE_ */
+void ADC_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+#ifdef _SAM3S_DACC_INSTANCE_
+void DACC_Handler       ( void ) __attribute__ ((weak, alias("__halt")));
+#endif /* _SAM3S_DACC_INSTANCE_ */
+void PWM_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void CRCCU_Handler      ( void ) __attribute__ ((weak, alias("__halt")));
+void ACC_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+void UDP_Handler        ( void ) __attribute__ ((weak, alias("__halt")));
+#endif //SAM3S4A
+
+
 #ifdef __cplusplus
 }
 #endif
-

@@ -327,7 +327,8 @@ void WDT_Handler        ( void );
 #if (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
 #define SSC        (0x40004000U) /**< \brief (SSC       ) Base Address */
 #define PDC_SSC    (0x40004100U) /**< \brief (PDC_SSC   ) Base Address */
-#define SPI        (0x40008000U) /**< \brief (SPI       ) Base Address */
+//SAM3S4A name collision with Arduino SPI library, change name from SPI to SPI0 to match Due.
+#define SPI0        (0x40008000U) /**< \brief (SPI       ) Base Address */
 #define PDC_SPI    (0x40008100U) /**< \brief (PDC_SPI   ) Base Address */
 #define TC0        (0x40010000U) /**< \brief (TC0       ) Base Address */
 #define TWI0       (0x40018000U) /**< \brief (TWI0      ) Base Address */
@@ -363,7 +364,8 @@ void WDT_Handler        ( void );
 #else
 #define SSC        ((Ssc    *)0x40004000U) /**< \brief (SSC       ) Base Address */
 #define PDC_SSC    ((Pdc    *)0x40004100U) /**< \brief (PDC_SSC   ) Base Address */
-#define SPI        ((Spi    *)0x40008000U) /**< \brief (SPI       ) Base Address */
+//SAM3S4A name collision with Arduino SPI library, change name from SPI to SPI0 to match Due.
+#define SPI0       ((Spi    *)0x40008000U) /**< \brief (SPI       ) Base Address */
 #define PDC_SPI    ((Pdc    *)0x40008100U) /**< \brief (PDC_SPI   ) Base Address */
 #define TC0        ((Tc     *)0x40010000U) /**< \brief (TC0       ) Base Address */
 #define TWI0       ((Twi    *)0x40018000U) /**< \brief (TWI0      ) Base Address */

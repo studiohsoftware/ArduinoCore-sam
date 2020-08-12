@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 by Cristian Maglie <c.maglie@arduino.cc>
+ * Copyright (c) 2010 by Cristian Maglie <c.maglie@bug.st>
  * Copyright (c) 2014 by Paul Stoffregen <paul@pjrc.com> (Transaction API)
  * SPI Master library for arduino.
  *
@@ -89,12 +89,14 @@ void SPIClass::usingInterrupt(uint8_t interruptNumber)
 			} else if (pio == PIOB) {
 				interruptMode |= 2;
 				interruptMask[1] |= mask;
+	#ifndef __SAM3S4A__
 			} else if (pio == PIOC) {
 				interruptMode |= 4;
 				interruptMask[2] |= mask;
 			} else if (pio == PIOD) {
 				interruptMode |= 8;
 				interruptMask[3] |= mask;
+	#endif
 			} else {
 				interruptMode = 16;
 			}
@@ -110,8 +112,10 @@ void SPIClass::beginTransaction(uint8_t pin, SPISettings settings)
 		if (mode < 16) {
 			if (mode & 1) PIOA->PIO_IDR = interruptMask[0];
 			if (mode & 2) PIOB->PIO_IDR = interruptMask[1];
+		#ifndef __SAM3S4A__
 			if (mode & 4) PIOC->PIO_IDR = interruptMask[2];
 			if (mode & 8) PIOD->PIO_IDR = interruptMask[3];
+		#endif
 		} else {
 			interruptSave = interruptsStatus();
 			noInterrupts();
@@ -132,8 +136,10 @@ void SPIClass::endTransaction(void)
 		if (mode < 16) {
 			if (mode & 1) PIOA->PIO_IER = interruptMask[0];
 			if (mode & 2) PIOB->PIO_IER = interruptMask[1];
+		#ifndef __SAM3S4A__
 			if (mode & 4) PIOC->PIO_IER = interruptMask[2];
 			if (mode & 8) PIOD->PIO_IER = interruptMask[3];
+		#endif
 		} else {
 			if (interruptSave) interrupts();
 		}
@@ -194,23 +200,6 @@ byte SPIClass::transfer(byte _pin, uint8_t _data, SPITransferMode _mode) {
 	if (bitOrder[ch] == LSBFIRST)
 		d = __REV(__RBIT(d));
 	return d & 0xFF;
-}
-
-uint16_t SPIClass::transfer16(byte _pin, uint16_t _data, SPITransferMode _mode) {
-	union { uint16_t val; struct { uint8_t lsb; uint8_t msb; }; } t;
-	uint32_t ch = BOARD_PIN_TO_SPI_CHANNEL(_pin);
-
-	t.val = _data;
-
-	if (bitOrder[ch] == LSBFIRST) {
-		t.lsb = transfer(_pin, t.lsb, SPI_CONTINUE);
-		t.msb = transfer(_pin, t.msb, _mode);
-	} else {
-		t.msb = transfer(_pin, t.msb, SPI_CONTINUE);
-		t.lsb = transfer(_pin, t.lsb, _mode);
-	}
-
-	return t.val;
 }
 
 void SPIClass::transfer(byte _pin, void *_buf, size_t _count, SPITransferMode _mode) {
@@ -294,4 +283,3 @@ static void SPI_0_Init(void) {
 
 SPIClass SPI(SPI_INTERFACE, SPI_INTERFACE_ID, SPI_0_Init);
 #endif
-

@@ -45,10 +45,8 @@ public:
     IPAddress(uint8_t first_octet, uint8_t second_octet, uint8_t third_octet, uint8_t fourth_octet);
     IPAddress(uint32_t address);
     IPAddress(const uint8_t *address);
-
     bool fromString(const char *address);
     bool fromString(const String &address) { return fromString(address.c_str()); }
-
     // Overloaded cast operator to allow IPAddress objects to be used where a pointer
     // to a four-byte uint8_t array is expected
     operator uint32_t() const { return _address.dword; };
@@ -66,7 +64,9 @@ public:
     virtual size_t printTo(Print& p) const;
 
     friend class EthernetClass;
+#ifndef __SAM3S4A__
     friend class UDP;
+#endif
     friend class Client;
     friend class Server;
     friend class DhcpClass;
@@ -74,5 +74,6 @@ public:
 };
 
 const IPAddress INADDR_NONE(0,0,0,0);
+
 
 #endif

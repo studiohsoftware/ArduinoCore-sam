@@ -44,8 +44,11 @@ extern uint32_t _estack;
 int main(void);
 /** \endcond */
 
+#ifndef __SAM3S4A__ //Arduino moved this to variant.cpp
 void __libc_init_array(void);
+#endif
 
+#ifndef __SAM3S4A__ //Arduino moved weak definitions to cortex_handlers.c
 /* Default empty handler */
 void Dummy_Handler(void);
 
@@ -103,6 +106,8 @@ void PWM_Handler        ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void CRCCU_Handler      ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void ACC_Handler        ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void UDP_Handler        ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+#endif //__SAM3S4A__
+
 
 /* Exception Table */
 __attribute__ ((section(".vectors")))
@@ -221,9 +226,10 @@ void Reset_Handler(void)
 	if (((uint32_t) pSrc >= IRAM_ADDR) && ((uint32_t) pSrc < IRAM_ADDR + IRAM_SIZE)) {
 		SCB->VTOR |= (1UL) << SCB_VTOR_TBLBASE_Pos;
 	}
-
+#ifndef __SAM3S4A__ //Arduino moved this to variant.cpp
 	/* Initialize the C library */
 	__libc_init_array();
+#endif 
 
 	/* Branch to main function */
 	main();
@@ -232,6 +238,7 @@ void Reset_Handler(void)
 	while (1);
 }
 
+#ifndef __SAM3S4A__ //Ardunio moved weak definitions to cortex_handlers.c
 /**
  * \brief Default interrupt handler for unused IRQs.
  */
@@ -240,4 +247,4 @@ void Dummy_Handler(void)
 	while (1) {
 	}
 }
-
+#endif //SAM3S4A

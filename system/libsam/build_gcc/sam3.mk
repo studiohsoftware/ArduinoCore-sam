@@ -47,7 +47,11 @@ OUTPUT_BIN = ../../../cores/arduino
 PROJECT_BASE_PATH = ..
 CMSIS_ROOT_PATH = $(PROJECT_BASE_PATH)/../CMSIS
 
-ifeq ($(CHIP), __SAM3S4C__)
+# Added SAM3S4A
+ifeq ($(CHIP), __SAM3S4A__)
+CHIP_NAME=sam3s4a
+CHIP_SERIE=sam3s
+else ifeq ($(CHIP), __SAM3S4C__)
 CHIP_NAME=sam3s4c
 CHIP_SERIE=sam3s
 else ifeq ($(CHIP), __SAM3U4E__)
@@ -186,4 +190,3 @@ clean:
 
 # dependencies
 $(addprefix $(OUTPUT_PATH)/,$(C_OBJ)): $(OUTPUT_PATH)/%.o: $(PROJECT_BASE_PATH)/chip.h $(wildcard $(PROJECT_BASE_PATH)/include/*.h) $(wildcard $(CMSIS_BASE_PATH)/*.h)
-

@@ -47,6 +47,7 @@ static void __initialize() {
 	NVIC_SetPriority(PIOB_IRQn, 0);
 	NVIC_EnableIRQ(PIOB_IRQn);
 
+#ifndef __SAM3S4A__
 	pmc_enable_periph_clk(ID_PIOC);
 	NVIC_DisableIRQ(PIOC_IRQn);
 	NVIC_ClearPendingIRQ(PIOC_IRQn);
@@ -58,6 +59,7 @@ static void __initialize() {
 	NVIC_ClearPendingIRQ(PIOD_IRQn);
 	NVIC_SetPriority(PIOD_IRQn, 0);
 	NVIC_EnableIRQ(PIOD_IRQn);
+#endif
 }
 
 
@@ -83,10 +85,12 @@ void attachInterrupt(uint32_t pin, void (*callback)(void), uint32_t mode)
 		callbacksPioA[pos] = callback;
 	if (pio == PIOB)
 		callbacksPioB[pos] = callback;
+#ifndef __SAM3S4A__
 	if (pio == PIOC)
 		callbacksPioC[pos] = callback;
 	if (pio == PIOD)
 		callbacksPioD[pos] = callback;
+#endif
 
 	// Configure the interrupt mode
 	if (mode == CHANGE) {
@@ -134,48 +138,50 @@ extern "C" {
 #endif
 
 void PIOA_Handler(void) {
-  uint32_t isr = PIOA->PIO_ISR;
-  uint8_t leading_zeros;
-  while((leading_zeros=__CLZ(isr))<32)
-  {
-    uint8_t pin=32-leading_zeros-1;
-    if(callbacksPioA[pin]) callbacksPioA[pin]();
-    isr=isr&(~(1<<pin));
-  }
+	uint32_t isr = PIOA->PIO_ISR;
+	uint32_t i;
+	for (i=0; i<32; i++, isr>>=1) {
+		if ((isr & 0x1) == 0)
+			continue;
+		if (callbacksPioA[i])
+			callbacksPioA[i]();
+	}
 }
 
 void PIOB_Handler(void) {
-  uint32_t isr = PIOB->PIO_ISR;
-  uint8_t leading_zeros;
-  while((leading_zeros=__CLZ(isr))<32)
-  {
-    uint8_t pin=32-leading_zeros-1;
-    if(callbacksPioB[pin]) callbacksPioB[pin]();
-    isr=isr&(~(1<<pin));
-  }
+	uint32_t isr = PIOB->PIO_ISR;
+	uint32_t i;
+	for (i=0; i<32; i++, isr>>=1) {
+		if ((isr & 0x1) == 0)
+			continue;
+		if (callbacksPioB[i])
+			callbacksPioB[i]();
+	}
 }
 
+#ifndef __SAM3S4A__
 void PIOC_Handler(void) {
-  uint32_t isr = PIOC->PIO_ISR;
-  uint8_t leading_zeros;
-  while((leading_zeros=__CLZ(isr))<32)
-  {
-    uint8_t pin=32-leading_zeros-1;
-    if(callbacksPioC[pin]) callbacksPioC[pin]();
-    isr=isr&(~(1<<pin));
-  }
+	uint32_t isr = PIOC->PIO_ISR;
+	uint32_t i;
+	for (i=0; i<32; i++, isr>>=1) {
+		if ((isr & 0x1) == 0)
+			continue;
+		if (callbacksPioC[i])
+			callbacksPioC[i]();
+	}
 }
 
 void PIOD_Handler(void) {
-  uint32_t isr = PIOD->PIO_ISR;
-  uint8_t leading_zeros;
-  while((leading_zeros=__CLZ(isr))<32)
-  {
-    uint8_t pin=32-leading_zeros-1;
-    if(callbacksPioD[pin]) callbacksPioD[pin]();
-    isr=isr&(~(1<<pin));
-  }
+	uint32_t isr = PIOD->PIO_ISR;
+	uint32_t i;
+	for (i=0; i<32; i++, isr>>=1) {
+		if ((isr & 0x1) == 0)
+			continue;
+		if (callbacksPioD[i])
+			callbacksPioD[i]();
+	}
 }
+#endif //SAM3S4A
 
 #ifdef __cplusplus
 }

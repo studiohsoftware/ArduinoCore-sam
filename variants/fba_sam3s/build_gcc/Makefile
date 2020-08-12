@@ -22,21 +22,20 @@ SUBMAKE_OPTIONS=--no-builtin-rules --no-builtin-variables --no-print-directory
 # Rules
 #-------------------------------------------------------------------------------
 
-all: arduino_due_x
+all: fba_sam3s
 
-.PHONY: arduino_due_x
-arduino_due_x:
+.PHONY: fba_sam3s
+fba_sam3s:
 	@echo ------------------------------------------------------------------------------------
-	@echo --- Making variant arduino_due_x
-	@$(MAKE) DEBUG=1 $(SUBMAKE_OPTIONS) -f libvariant_arduino_due_x.mk
+	@echo --- Making variant fba_sam3s
+	@$(MAKE) DEBUG=1 $(SUBMAKE_OPTIONS) -f libvariant_fba_sam3s.mk
 #	@$(MAKE) $(SUBMAKE_OPTIONS) -f libvariant_arduino_due_x.mk
 	@echo ------------------------------------------------------------------------------------
 
 .PHONY: clean
 clean:
 	@echo ------------------------------------------------------------------------------------
-	@echo --- Cleaning variant arduino_due_x
-	@$(MAKE) DEBUG=1 $(SUBMAKE_OPTIONS) -f libvariant_arduino_due_x.mk $@
+	@echo --- Cleaning variant fba_sam3s
+	@$(MAKE) DEBUG=1 $(SUBMAKE_OPTIONS) -f libvariant_fba_sam3s.mk $@
 #	@$(MAKE) $(SUBMAKE_OPTIONS) -f libvariant_arduino_due_x.mk $@
 	@echo ------------------------------------------------------------------------------------
-

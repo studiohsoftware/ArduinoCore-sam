@@ -23,6 +23,10 @@
 extern "C" {
 #endif
 
+#ifdef __SAM3S4A__
+#define EFC0 EFC
+#endif
+
 __attribute__ ((long_call, section (".ramfunc")))
 void banzai() {
 	// Disable all interrupts

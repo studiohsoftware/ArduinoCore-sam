@@ -19,8 +19,8 @@
 # Makefile for compiling libArduino
 .SUFFIXES: .o .a .c .s
 
-CHIP=__SAM3X8E__
-VARIANT=arduino_due_x
+CHIP=__SAM3S4A__
+VARIANT=fba_sam3s
 LIBNAME=libvariant_$(VARIANT)
 TOOLCHAIN=gcc
 
@@ -134,7 +134,6 @@ $(VARIANT): create_output $(OUTPUT_LIB)
 
 .PHONY: create_output
 create_output:
-	@echo ------------------------------------------------------------------------------------
 	@echo -------------------------
 	@echo --- Preparing variant $(VARIANT) files in $(OUTPUT_PATH) $(OUTPUT_BIN)
 	@echo -------------------------
@@ -181,4 +180,3 @@ clean:
 	-@$(RM) $(OUTPUT_PATH) 1>NUL 2>&1
 	-@$(RM) $(OUTPUT_BIN)/$(OUTPUT_LIB) 1>NUL 2>&1
 	@echo ------------------------------------------------------------------------------------
-
